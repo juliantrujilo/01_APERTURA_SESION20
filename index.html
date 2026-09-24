@@ -148,6 +148,29 @@ tr:hover td { background:var(--sena-verde-glow); }
 .roadmap-titulo { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; color:var(--texto); margin-bottom:10px; line-height:1.25; }
 .roadmap-desc { font-size:13px; color:var(--texto-dim); line-height:1.65; }
 
+/* ── RAP cards — competencia y resultados de aprendizaje ── */
+.rap-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; position:relative; z-index:1; margin-bottom:8px; }
+@media(max-width:900px){ .rap-grid{ grid-template-columns:1fr; } }
+.rap-card { background:#fff; border-radius:18px; padding:0; overflow:hidden; border:2px solid var(--borde); position:relative; transition:transform .2s, box-shadow .2s; }
+.rap-card:hover { transform:translateY(-4px); box-shadow:0 18px 36px rgba(0,0,0,.09); }
+.rap-card-bar { height:6px; width:100%; }
+.rap-card.done .rap-card-bar { background:linear-gradient(90deg, var(--sena-verde), #6bd44e); }
+.rap-card.active .rap-card-bar { background:linear-gradient(90deg, var(--acento-teal), var(--acento-azul)); }
+.rap-card.pending .rap-card-bar { background:linear-gradient(90deg, var(--acento-teal), #7dd3fc); opacity:.6; }
+.rap-card.active { border-color:var(--acento-teal); box-shadow:0 0 0 4px var(--acento-teal-glow), 0 18px 36px rgba(14,165,233,.14); }
+.rap-card-body { padding:28px 26px 26px; }
+.rap-card-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:18px; }
+.rap-card-icon { font-size:42px; line-height:1; }
+.rap-card-status { font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:5px 12px; border-radius:20px; white-space:nowrap; }
+.rap-card.done .rap-card-status { background:var(--sena-verde-glow); color:var(--sena-verde-dark); }
+.rap-card.active .rap-card-status { background:var(--acento-teal-glow); color:#0369a1; }
+.rap-card.pending .rap-card-status { background:var(--acento-teal-glow); color:#0369a1; opacity:.8; }
+.rap-card-id { font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700; letter-spacing:.08em; color:var(--texto-dimmer); margin-bottom:6px; text-transform:uppercase; }
+.rap-card-titulo { font-family:'Syne',sans-serif; font-size:21px; font-weight:800; color:var(--texto); margin-bottom:12px; line-height:1.2; }
+.rap-card-desc { font-size:13.5px; color:var(--texto-dim); line-height:1.6; }
+.rap-card.active .rap-card-icon { animation: rapPulse 1.8s ease-in-out infinite; }
+@keyframes rapPulse { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.12); } }
+
 .footer-nav { position:fixed; bottom:0; left:0; right:0; z-index:90; background:rgba(255,255,255,0.95); backdrop-filter:blur(16px); border-top:2px solid var(--sena-verde); padding:14px 32px; display:flex; align-items:center; justify-content:space-between; }
 .footer-btn { background:var(--sena-verde); color:#fff; border:none; padding:10px 24px; border-radius:8px; font-weight:700; font-size:14px; cursor:pointer; transition:all .2s; }
 .footer-btn:hover { background:var(--sena-verde-dark); transform:translateY(-1px); }
@@ -205,6 +228,7 @@ tr:hover td { background:var(--sena-verde-glow); }
   </div>
   <nav class="topbar-nav">
     <a href="#portada">Inicio</a>
+    <a href="#competencia">Competencia</a>
     <a href="#plan">Plan</a>
     <a href="#logros">Logros</a>
     <a href="#concepto">Mobile-first</a>
@@ -238,10 +262,94 @@ tr:hover td { background:var(--sena-verde-glow); }
       <div class="portada-meta-item">🗂️ Fase 5 — React y Tailwind</div>
     </div>
   </div>
-  <span class="slide-num-badge">01 / 11</span>
+  <span class="slide-num-badge">01 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 2 — PLAN ══════════ -->
+<!-- ══════════ SLIDE 2 — COMPETENCIA Y RESULTADOS DE APRENDIZAJE ══════════ -->
+<section class="slide bg-alt" id="competencia">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag purpura">Marco de formación</span>
+      <h2 class="sec-titulo">Competencia 220501096</h2>
+      <p class="sec-desc">Construcción del software de acuerdo con el diseño establecido. Todo lo que hacemos en esta fase construye evidencia real para estos 5 Resultados de Aprendizaje.</p>
+    </div>
+
+    <div class="rap-grid">
+      <div class="rap-card done">
+        <div class="rap-card-bar"></div>
+        <div class="rap-card-body">
+          <div class="rap-card-top">
+            <span class="rap-card-icon">🗺️</span>
+            <span class="rap-card-status">✅ Cerrado</span>
+          </div>
+          <div class="rap-card-id">RAP1</div>
+          <div class="rap-card-titulo">Planear</div>
+          <div class="rap-card-desc">Planear actividades de construcción según el diseño establecido.</div>
+        </div>
+      </div>
+
+      <div class="rap-card done">
+        <div class="rap-card-bar"></div>
+        <div class="rap-card-body">
+          <div class="rap-card-top">
+            <span class="rap-card-icon">🗄️</span>
+            <span class="rap-card-status">✅ Cerrado</span>
+          </div>
+          <div class="rap-card-id">RAP2</div>
+          <div class="rap-card-titulo">Base de datos</div>
+          <div class="rap-card-desc">Construir la base de datos a partir del modelo de datos. Cerrado en Fase 3.</div>
+        </div>
+      </div>
+
+      <div class="rap-card active">
+        <div class="rap-card-bar"></div>
+        <div class="rap-card-body">
+          <div class="rap-card-top">
+            <span class="rap-card-icon">🧩</span>
+            <span class="rap-card-status">🟡 Hoy</span>
+          </div>
+          <div class="rap-card-id">RAP3</div>
+          <div class="rap-card-titulo">Componentes front-end</div>
+          <div class="rap-card-desc">Crear componentes front-end de acuerdo con el diseño. En curso — Fase 5.</div>
+        </div>
+      </div>
+
+      <div class="rap-card pending">
+        <div class="rap-card-bar"></div>
+        <div class="rap-card-body">
+          <div class="rap-card-top">
+            <span class="rap-card-icon">💻</span>
+            <span class="rap-card-status">🟡 En curso</span>
+          </div>
+          <div class="rap-card-id">RAP4</div>
+          <div class="rap-card-titulo">Codificar</div>
+          <div class="rap-card-desc">Codificar el software según el diseño establecido. Backend listo, frontend en migración.</div>
+        </div>
+      </div>
+
+      <div class="rap-card pending">
+        <div class="rap-card-bar"></div>
+        <div class="rap-card-body">
+          <div class="rap-card-top">
+            <span class="rap-card-icon">🧪</span>
+            <span class="rap-card-status">🟡 En curso</span>
+          </div>
+          <div class="rap-card-id">RAP5</div>
+          <div class="rap-card-titulo">Pruebas</div>
+          <div class="rap-card-desc">Realizar pruebas para verificar la funcionalidad. Evidencia en cada sesión.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box tip" style="margin-top:20px;">
+      <div class="info-box-title">📍 Dónde estamos hoy</div>
+      <div class="info-box-content">La Sesión 20 aporta evidencia directa a <strong>RAP3</strong> (componente de tarjeta de producto en grid responsive) y <strong>RAP4</strong> (código real aplicado sobre <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">frontend-react/</code>) — con verificación en el navegador que también deja evidencia para <strong>RAP5</strong>.</div>
+    </div>
+  </div>
+  <span class="slide-num-badge">02 / 12</span>
+</section>
+
+<!-- ══════════ SLIDE 3 — PLAN ══════════ -->
 <section class="slide" id="plan">
   <div class="slide-inner">
     <div class="sec-header">
@@ -288,10 +396,10 @@ tr:hover td { background:var(--sena-verde-glow); }
       </div>
     </div>
   </div>
-  <span class="slide-num-badge">02 / 11</span>
+  <span class="slide-num-badge">03 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 3 — LOGROS ══════════ -->
+<!-- ══════════ SLIDE 4 — LOGROS ══════════ -->
 <section class="slide bg-teal" id="logros">
   <div class="slide-inner">
     <div class="sec-header">
@@ -324,10 +432,10 @@ tr:hover td { background:var(--sena-verde-glow); }
       </div>
     </div>
   </div>
-  <span class="slide-num-badge">03 / 11</span>
+  <span class="slide-num-badge">04 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 4 — MOBILE-FIRST ══════════ -->
+<!-- ══════════ SLIDE 5 — MOBILE-FIRST ══════════ -->
 <section class="slide bg-alt" id="concepto">
   <div class="slide-inner">
     <div class="sec-header">
@@ -372,10 +480,10 @@ tr:hover td { background:var(--sena-verde-glow); }
       <div class="info-box-content">La clase sin prefijo (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;">flex</code>) es el diseño base, el que aplica siempre desde el celular más pequeño. Un prefijo como <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">md:flex</code> no reemplaza esa base — <strong>se suma</strong> a partir de esa pantalla en adelante. Más adelante vamos a ver este mismo patrón aplicado al grid del catálogo de productos.</div>
     </div>
   </div>
-  <span class="slide-num-badge">04 / 11</span>
+  <span class="slide-num-badge">05 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 5 — GRID VS FLEXBOX ══════════ -->
+<!-- ══════════ SLIDE 6 — GRID VS FLEXBOX ══════════ -->
 <section class="slide" id="grid-flex">
   <div class="slide-inner">
     <div class="sec-header">
@@ -423,10 +531,10 @@ tr:hover td { background:var(--sena-verde-glow); }
       <div class="info-box-content">El catálogo de productos (varias tarjetas repetidas) usa <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid</code>. Dentro de cada tarjeta individual (imagen arriba, texto abajo) seguimos usando <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">flex flex-col</code>, igual que en S19 — se combinan sin problema.</div>
     </div>
   </div>
-  <span class="slide-num-badge">05 / 11</span>
+  <span class="slide-num-badge">06 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 6 — DEMO VISUAL DEL GRID ══════════ -->
+<!-- ══════════ SLIDE 7 — DEMO VISUAL DEL GRID ══════════ -->
 <section class="slide bg-teal" id="grid-demo">
   <div class="slide-inner">
     <div class="sec-header">
@@ -471,10 +579,10 @@ tr:hover td { background:var(--sena-verde-glow); }
       </div>
     </div>
   </div>
-  <span class="slide-num-badge">06 / 11</span>
+  <span class="slide-num-badge">07 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 7 — BREAKPOINTS ══════════ -->
+<!-- ══════════ SLIDE 8 — BREAKPOINTS ══════════ -->
 <section class="slide bg-alt" id="breakpoints">
   <div class="slide-inner">
     <div class="sec-header">
@@ -526,10 +634,10 @@ tr:hover td { background:var(--sena-verde-glow); }
       <div class="info-box-content"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid-cols-1</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">md:grid-cols-2</code> y <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">lg:grid-cols-3</code> conviven en el mismo <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">className</code>, pero cada una controla el número de columnas <strong>desde su propio ancho de pantalla en adelante</strong> — por eso a los 1024px gana <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">lg:grid-cols-3</code> sobre las otras dos, aunque las tres sigan escritas ahí.</div>
     </div>
   </div>
-  <span class="slide-num-badge">07 / 11</span>
+  <span class="slide-num-badge">08 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 8 — CONTENEDOR REAL DESDE EL INICIO ══════════ -->
+<!-- ══════════ SLIDE 9 — CONTENEDOR REAL DESDE EL INICIO ══════════ -->
 <section class="slide bg-azul" id="contenedor">
   <div class="slide-inner">
     <div class="sec-header">
@@ -580,10 +688,10 @@ tr:hover td { background:var(--sena-verde-glow); }
       </table>
     </div>
   </div>
-  <span class="slide-num-badge">08 / 11</span>
+  <span class="slide-num-badge">09 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 9 — PREREQUISITOS ══════════ -->
+<!-- ══════════ SLIDE 10 — PREREQUISITOS ══════════ -->
 <section class="slide bg-alt" id="prerequisitos">
   <div class="slide-inner">
     <div class="sec-header">
@@ -620,10 +728,10 @@ tr:hover td { background:var(--sena-verde-glow); }
       <div class="info-box-content">Ni Vite, ni Tailwind, ni ningún paquete nuevo — todo lo de hoy son clases utility adicionales sobre el mismo proyecto de S19.</div>
     </div>
   </div>
-  <span class="slide-num-badge">09 / 11</span>
+  <span class="slide-num-badge">10 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 10 — RESUMEN DE CLASES NUEVAS ══════════ -->
+<!-- ══════════ SLIDE 11 — RESUMEN DE CLASES NUEVAS ══════════ -->
 <section class="slide" id="resumen-clases">
   <div class="slide-inner">
     <div class="sec-header">
@@ -644,10 +752,10 @@ tr:hover td { background:var(--sena-verde-glow); }
       </table>
     </div>
   </div>
-  <span class="slide-num-badge">10 / 11</span>
+  <span class="slide-num-badge">11 / 12</span>
 </section>
 
-<!-- ══════════ SLIDE 11 — ENTREGABLE ══════════ -->
+<!-- ══════════ SLIDE 12 — ENTREGABLE ══════════ -->
 <section class="slide bg-verde" id="entregable">
   <div class="bg-dots"></div>
   <div class="slide-inner">
@@ -688,7 +796,7 @@ tr:hover td { background:var(--sena-verde-glow); }
       <div class="info-box-content">Cierra el Bloque A de Tailwind y arranca el Bloque B: ¿Qué es React? Componentes, JSX, Virtual DOM, y el primer <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">&lt;Navbar /&gt;</code> como componente separado de verdad.</div>
     </div>
   </div>
-  <span class="slide-num-badge">11 / 11</span>
+  <span class="slide-num-badge">12 / 12</span>
 </section>
 
 <!-- ── FOOTER NAV FIJO ── -->
