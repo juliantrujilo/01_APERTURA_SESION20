@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 20: Componentes y Responsive | SENA ADSO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sena-verde: #39a900;
+  --sena-verde-dark: #2d8400;
+  --sena-verde-glow: rgba(57,169,0,0.10);
+  --sena-verde-border: rgba(57,169,0,0.30);
+  --sena-naranja: #ff6b00;
+  --sena-naranja-glow: rgba(255,107,0,0.10);
+  --sena-naranja-border: rgba(255,107,0,0.30);
+  --texto: #1a1a2e;
+  --texto-dim: rgba(26,26,46,0.62);
+  --texto-dimmer: rgba(26,26,46,0.38);
+  --bg: #f8fafc;
+  --bg-alt: #f4f7f2;
+  --borde: #e2e8f0;
+  --acento-azul: #3b82f6;
+  --acento-azul-glow: rgba(59,130,246,0.10);
+  --acento-purpura: #8b5cf6;
+  --acento-purpura-glow: rgba(139,92,246,0.10);
+  --alerta-amarillo: #f59e0b;
+  --alerta-amarillo-glow: rgba(245,158,11,0.10);
+  --alerta-rojo: #ef4444;
+  --alerta-rojo-glow: rgba(239,68,68,0.10);
+  --acento-teal: #0ea5e9;
+  --acento-teal-glow: rgba(14,165,233,0.10);
+  --acento-teal-border: rgba(14,165,233,0.30);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; color:var(--texto); background:var(--bg); line-height:1.6; overflow-x:hidden; }
+
+.topbar { position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.95); backdrop-filter:blur(16px); border-bottom:2px solid var(--sena-verde); padding:12px 32px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 12px var(--sena-verde-glow); }
+.topbar-left { display:flex; align-items:center; gap:16px; }
+.sena-logo { background:var(--sena-verde); color:#fff; font-weight:900; font-size:18px; padding:8px 16px; border-radius:8px; letter-spacing:1px; }
+.topbar-brand { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--sena-verde-dark); }
+.topbar-sub { font-size:12px; color:var(--texto-dimmer); margin-top:2px; display:none; }
+@media(min-width:600px){ .topbar-sub{display:block;} }
+.topbar-nav { display:none; gap:4px; flex-wrap:wrap; }
+@media(min-width:900px){ .topbar-nav{display:flex;} }
+.topbar-nav a { color:var(--texto-dim); text-decoration:none; font-size:11px; font-weight:600; padding:6px 14px; border-radius:20px; border:1px solid transparent; transition:all .25s; white-space:nowrap; }
+.topbar-nav a:hover { color:var(--sena-verde-dark); border-color:var(--sena-verde-border); background:var(--sena-verde-glow); }
+
+.slide { min-height:100vh; padding:80px 48px; position:relative; scroll-margin-top:64px; border-bottom:1px solid var(--borde); }
+.slide.bg-alt { background:var(--bg-alt); }
+.slide.bg-verde { background:linear-gradient(135deg, var(--sena-verde-glow) 0%, #ffffff 60%); }
+.slide.bg-azul  { background:linear-gradient(135deg, var(--acento-azul-glow) 0%, #ffffff 60%); }
+.slide.bg-teal  { background:linear-gradient(135deg, var(--acento-teal-glow) 0%, #ffffff 60%); }
+.slide-inner { max-width:1200px; margin:0 auto; }
+.slide-num-badge { position:absolute; top:24px; right:24px; background:var(--sena-verde-glow); color:var(--sena-verde); font-size:11px; font-weight:700; padding:6px 12px; border-radius:20px; letter-spacing:1px; border:1px solid var(--sena-verde-border); }
+
+.bg-dots { position:absolute; inset:0; background-image:radial-gradient(var(--sena-verde-border) 1px, transparent 1px); background-size:28px 28px; pointer-events:none; opacity:0.35; }
+.bg-glow { position:absolute; width:600px; height:600px; border-radius:50%; filter:blur(120px); opacity:0.22; pointer-events:none; z-index:0; }
+.bg-glow.g1 { background:radial-gradient(circle, var(--sena-verde-glow), transparent 70%); top:-200px; left:-200px; }
+.bg-glow.g2 { background:radial-gradient(circle, var(--sena-naranja-glow), transparent 70%); bottom:-200px; right:-200px; }
+
+.portada-tag { display:inline-flex; align-items:center; gap:8px; background:var(--sena-verde-glow); border:1px solid var(--sena-verde-border); padding:10px 20px; border-radius:30px; font-size:12px; font-weight:700; color:var(--sena-verde-dark); letter-spacing:1.5px; margin-bottom:32px; position:relative; z-index:1; }
+.portada-tag .dot { width:6px; height:6px; background:var(--sena-verde); border-radius:50%; animation:blink 1.5s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.portada-titulo { font-family:'Syne',sans-serif; font-size:clamp(40px,7vw,68px); font-weight:800; line-height:1.1; margin-bottom:20px; color:var(--texto); position:relative; z-index:1; }
+.portada-titulo .linea2 { display:block; background:linear-gradient(135deg, var(--acento-teal), var(--acento-azul)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.portada-titulo .linea3 { display:block; background:linear-gradient(135deg, var(--sena-naranja), var(--acento-purpura)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.portada-desc { font-size:clamp(15px,2vw,18px); color:var(--texto-dim); max-width:680px; margin-bottom:40px; position:relative; z-index:1; line-height:1.7; }
+.portada-meta { display:flex; gap:16px; flex-wrap:wrap; position:relative; z-index:1; }
+.portada-meta-item { background:rgba(255,255,255,0.9); border:1px solid var(--borde); padding:10px 20px; border-radius:12px; font-size:14px; font-weight:600; color:var(--texto-dim); }
+
+.sec-header { margin-bottom:40px; position:relative; z-index:1; }
+.sec-tag { display:inline-block; font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; letter-spacing:1.2px; margin-bottom:14px; text-transform:uppercase; border:1px solid transparent; }
+.sec-tag.verde   { background:var(--sena-verde-glow); color:var(--sena-verde); border-color:var(--sena-verde-border); }
+.sec-tag.naranja { background:var(--sena-naranja-glow); color:var(--sena-naranja); border-color:var(--sena-naranja-border); }
+.sec-tag.azul    { background:var(--acento-azul-glow); color:var(--acento-azul); border-color:rgba(59,130,246,0.30); }
+.sec-tag.purpura { background:var(--acento-purpura-glow); color:var(--acento-purpura); border-color:rgba(139,92,246,0.30); }
+.sec-tag.amarillo{ background:var(--alerta-amarillo-glow); color:var(--alerta-amarillo); border-color:rgba(245,158,11,0.30); }
+.sec-tag.teal    { background:var(--acento-teal-glow); color:var(--acento-teal); border-color:var(--acento-teal-border); }
+.sec-titulo { font-family:'Syne',sans-serif; font-size:clamp(28px,4vw,42px); font-weight:800; color:var(--texto); margin-bottom:12px; line-height:1.2; }
+.sec-desc { font-size:clamp(15px,1.8vw,17px); color:var(--texto-dim); max-width:800px; line-height:1.7; }
+
+.info-box { border-radius:12px; padding:20px 24px; margin:20px 0; border-left:4px solid; position:relative; z-index:1; }
+.info-box.tip     { background:var(--sena-verde-glow); border-color:var(--sena-verde); }
+.info-box.warning { background:var(--alerta-amarillo-glow); border-color:var(--alerta-amarillo); }
+.info-box.danger  { background:var(--alerta-rojo-glow); border-color:var(--alerta-rojo); }
+.info-box.info    { background:var(--acento-azul-glow); border-color:var(--acento-azul); }
+.info-box.teal    { background:var(--acento-teal-glow); border-color:var(--acento-teal); }
+.info-box.purpura { background:var(--acento-purpura-glow); border-color:var(--acento-purpura); }
+.info-box-title   { font-weight:700; font-size:14px; margin-bottom:8px; }
+.info-box.tip     .info-box-title { color:var(--sena-verde-dark); }
+.info-box.warning .info-box-title { color:#92400e; }
+.info-box.danger  .info-box-title { color:#991b1b; }
+.info-box.info    .info-box-title { color:#1e40af; }
+.info-box.teal    .info-box-title { color:#0369a1; }
+.info-box.purpura .info-box-title { color:#5b21b6; }
+.info-box-content { font-size:14px; color:var(--texto-dim); line-height:1.7; }
+
+.concepto-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px; position:relative; z-index:1; margin-bottom:28px; }
+.concepto-card { background:#fff; border:2px solid var(--borde); border-radius:16px; padding:24px; }
+.concepto-icon  { font-size:36px; margin-bottom:12px; }
+.concepto-titulo{ font-family:'Syne',sans-serif; font-size:16px; font-weight:800; color:var(--texto); margin-bottom:6px; }
+.concepto-desc  { font-size:13px; color:var(--texto-dim); line-height:1.6; }
+.concepto-card.verde   { border-color:var(--sena-verde-border); background:var(--sena-verde-glow); }
+.concepto-card.azul    { border-color:rgba(59,130,246,0.25); background:var(--acento-azul-glow); }
+.concepto-card.teal    { border-color:var(--acento-teal-border); background:var(--acento-teal-glow); }
+.concepto-card.purpura { border-color:rgba(139,92,246,0.25); background:var(--acento-purpura-glow); }
+.concepto-card.naranja { border-color:var(--sena-naranja-border); background:var(--sena-naranja-glow); }
+.concepto-card.amarillo{ border-color:rgba(245,158,11,0.30); background:var(--alerta-amarillo-glow); }
+
+.tabla-wrap { overflow-x:auto; position:relative; z-index:1; margin:20px 0; }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th { background:var(--sena-verde); color:#fff; padding:12px 16px; text-align:left; font-weight:700; }
+th:first-child { border-radius:8px 0 0 0; } th:last-child { border-radius:0 8px 0 0; }
+td { padding:12px 16px; border-bottom:1px solid var(--borde); vertical-align:top; }
+tr:nth-child(even) td { background:var(--bg-alt); }
+tr:hover td { background:var(--sena-verde-glow); }
+
+.paso-lista { display:flex; flex-direction:column; gap:0; position:relative; z-index:1; }
+.paso-item { display:flex; gap:24px; padding:28px 0; border-bottom:1px solid var(--borde); }
+.paso-item:last-child { border-bottom:none; }
+.paso-num { flex-shrink:0; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:18px; font-weight:800; color:#fff; }
+.paso-num.verde   { background:var(--sena-verde); }
+.paso-num.azul    { background:var(--acento-azul); }
+.paso-num.teal    { background:var(--acento-teal); }
+.paso-num.purpura { background:var(--acento-purpura); }
+.paso-num.naranja { background:var(--sena-naranja); }
+.paso-body { flex:1; }
+.paso-titulo { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; color:var(--texto); margin-bottom:6px; }
+.paso-desc { font-size:14px; color:var(--texto-dim); line-height:1.7; margin-bottom:12px; }
+
+.entregable-box { background:linear-gradient(135deg, var(--sena-verde-glow), var(--acento-teal-glow)); border:2px solid var(--sena-verde-border); border-radius:16px; padding:28px 32px; position:relative; z-index:1; margin-top:32px; }
+.entregable-title { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; color:var(--sena-verde-dark); margin-bottom:16px; }
+.entregable-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.entregable-list li { display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--texto); }
+.entregable-list li::before { content:'✅'; flex-shrink:0; }
+
+.roadmap-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; position:relative; z-index:1; margin-bottom:8px; }
+@media(max-width:900px){ .roadmap-grid{ grid-template-columns:1fr; } }
+.roadmap-card { background:#fff; border:2px solid var(--borde); border-radius:18px; padding:28px 24px 24px; position:relative; overflow:hidden; transition:transform .2s, box-shadow .2s; }
+.roadmap-card:hover { transform:translateY(-4px); box-shadow:0 16px 32px rgba(14,165,233,.14); border-color:var(--acento-teal-border); }
+.roadmap-num { position:absolute; top:-6px; right:4px; font-family:'Syne',sans-serif; font-size:72px; font-weight:800; color:var(--acento-teal); opacity:.10; line-height:1; pointer-events:none; }
+.roadmap-icon { font-size:34px; margin-bottom:14px; }
+.roadmap-tag { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--acento-teal); background:var(--acento-teal-glow); border:1px solid var(--acento-teal-border); padding:4px 10px; border-radius:20px; margin-bottom:12px; }
+.roadmap-titulo { font-family:'Syne',sans-serif; font-size:18px; font-weight:800; color:var(--texto); margin-bottom:10px; line-height:1.25; }
+.roadmap-desc { font-size:13px; color:var(--texto-dim); line-height:1.65; }
+
+.footer-nav { position:fixed; bottom:0; left:0; right:0; z-index:90; background:rgba(255,255,255,0.95); backdrop-filter:blur(16px); border-top:2px solid var(--sena-verde); padding:14px 32px; display:flex; align-items:center; justify-content:space-between; }
+.footer-btn { background:var(--sena-verde); color:#fff; border:none; padding:10px 24px; border-radius:8px; font-weight:700; font-size:14px; cursor:pointer; transition:all .2s; }
+.footer-btn:hover { background:var(--sena-verde-dark); transform:translateY(-1px); }
+.footer-btn:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+.footer-page { font-size:13px; font-weight:600; color:var(--texto-dim); }
+
+/* Comparador de código — editor real con syntax highlighting */
+.code-editor { background:#1a1a2e; border-radius:14px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.25); display:flex; flex-direction:column; }
+.code-editor-header { background:#12121f; padding:10px 16px; display:flex; align-items:center; gap:8px; }
+.term-dot { width:11px; height:11px; border-radius:50%; }
+.term-dot.r { background:#ff5f57; } .term-dot.y { background:#febc2e; } .term-dot.g { background:#28c840; }
+.code-editor-title { margin-left:8px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#8892a4; flex:1; }
+.code-editor-body { padding:14px 0; font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.85; flex:1; overflow-x:auto; }
+.cl { display:grid; grid-template-columns:24px 1fr; column-gap:10px; padding:0 18px; white-space:pre; }
+.cl .ln { color:#4a5178; user-select:none; text-align:right; }
+.cl .code { color:#e2e8f0; }
+.indent-1 .code { padding-left:18px; }
+.cm { color:#565f89; font-style:italic; }
+.sel { color:#7dcfff; }
+.prop { color:#9ece6a; }
+.val { color:#e2e8f0; }
+.tag { color:#f7768e; }
+.attr { color:#e0af68; }
+.str { color:#9ece6a; }
+.punc { color:#8892a4; }
+
+/* Grid demo visual — mockup de navegador */
+.browser-mock { border-radius:14px; overflow:hidden; border:1.5px solid var(--borde); box-shadow:0 20px 50px rgba(0,0,0,.08); background:#fff; }
+.browser-bar { background:#f1f5f9; padding:9px 14px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--borde); }
+.browser-dot { width:10px; height:10px; border-radius:50%; }
+.browser-dot.r{background:#ff5f57;} .browser-dot.y{background:#febc2e;} .browser-dot.g{background:#28c840;}
+.browser-url { margin-left:8px; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#94a3b8; background:#fff; padding:3px 10px; border-radius:5px; border:1px solid var(--borde); flex:1; }
+.demo-grid { display:grid; gap:12px; padding:16px; }
+.demo-grid.cols-1 { grid-template-columns:1fr; }
+.demo-grid.cols-2 { grid-template-columns:1fr 1fr; }
+.demo-grid.cols-3 { grid-template-columns:1fr 1fr 1fr; }
+.demo-card { background:#fff; border:1px solid var(--borde); border-radius:10px; padding:10px; box-shadow:0 4px 10px rgba(0,0,0,.05); }
+.demo-card img { width:100%; height:50px; background:var(--sena-verde-glow); border-radius:6px; display:block; margin-bottom:6px; }
+.demo-card .t { font-size:10.5px; font-weight:700; }
+.demo-card .p { font-size:10.5px; color:var(--sena-verde-dark); font-weight:800; }
+.device-label { text-align:center; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:var(--texto-dim); margin-top:10px; letter-spacing:.04em; }
+
+@media(max-width:768px){ .slide{padding:60px 24px;} .topbar{padding:10px 20px;} }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="sena-logo">SENA</div>
+    <div>
+      <div class="topbar-brand">ADSO · Construcción de Software</div>
+      <div class="topbar-sub">Ficha 3229944 · Garzón, Huila</div>
+    </div>
+  </div>
+  <nav class="topbar-nav">
+    <a href="#portada">Inicio</a>
+    <a href="#plan">Plan</a>
+    <a href="#logros">Logros</a>
+    <a href="#concepto">Mobile-first</a>
+    <a href="#grid-flex">Grid vs Flexbox</a>
+    <a href="#breakpoints">Breakpoints</a>
+    <a href="#contenedor">Contenedor real</a>
+    <a href="#prerequisitos">Prerequisitos</a>
+    <a href="#entregable">Entregable</a>
+  </nav>
+</div>
+
+<!-- ══════════ SLIDE 1 — PORTADA ══════════ -->
+<section class="slide" id="portada">
+  <div class="bg-dots"></div>
+  <div class="bg-glow g1"></div>
+  <div class="bg-glow g2"></div>
+  <div class="slide-inner" style="position:relative;z-index:1;">
+    <div class="portada-tag"><span class="dot"></span> SESIÓN 20 · FASE 5 REACT Y TAILWIND CSS</div>
+    <h1 class="portada-titulo">
+      TechStore Pro<br>
+      <span class="linea2">Componentes y</span>
+      <span class="linea3">Diseño Responsive</span>
+    </h1>
+    <p class="portada-desc">
+      En la Sesión 19 instalamos Tailwind y migramos un navbar, pero cada elemento quedó suelto, sin ningún layout que lo organizara. Hoy corregimos eso desde la raíz: un contenedor real con estructura, un grid de catálogo con productos reales, y las clases responsive para que se vea bien en celular, tablet y escritorio.
+    </p>
+    <div class="portada-meta">
+      <div class="portada-meta-item">📅 Sesión 20 de 44</div>
+      <div class="portada-meta-item">📐 Grid y Flexbox</div>
+      <div class="portada-meta-item">📱 Mobile-first</div>
+      <div class="portada-meta-item">🗂️ Fase 5 — React y Tailwind</div>
+    </div>
+  </div>
+  <span class="slide-num-badge">01 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 2 — PLAN ══════════ -->
+<section class="slide" id="plan">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag naranja">Agenda</span>
+      <h2 class="sec-titulo">Plan de la sesión</h2>
+      <p class="sec-desc">240 minutos para pasar de elementos sueltos a un catálogo responsive de verdad.</p>
+    </div>
+
+    <div class="roadmap-grid">
+      <div class="roadmap-card">
+        <div class="roadmap-num">1</div>
+        <div class="roadmap-icon">🎬</div>
+        <div class="roadmap-tag">0–20 min</div>
+        <div class="roadmap-titulo">Apertura</div>
+        <div class="roadmap-desc">Mobile-first, grid vs flexbox, breakpoints, por qué el fragment de S19 no bastaba</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-num">2</div>
+        <div class="roadmap-icon">📦</div>
+        <div class="roadmap-tag">20–60 min</div>
+        <div class="roadmap-titulo">Contenedor real</div>
+        <div class="roadmap-desc">Reemplazar el fragment por un &lt;main&gt; con layout — Paso 1 de la guía</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-num">3</div>
+        <div class="roadmap-icon">🛒</div>
+        <div class="roadmap-tag">60–140 min</div>
+        <div class="roadmap-titulo">Grid de catálogo</div>
+        <div class="roadmap-desc">Componente ProductCard repetido con datos reales, organizado en grid</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-num">4</div>
+        <div class="roadmap-icon">📱</div>
+        <div class="roadmap-tag">140–210 min</div>
+        <div class="roadmap-titulo">Responsive</div>
+        <div class="roadmap-desc">Aplicar sm:/md:/lg: al grid y probar en distintos anchos de pantalla</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-num">5</div>
+        <div class="roadmap-icon">🏁</div>
+        <div class="roadmap-tag">210–240 min</div>
+        <div class="roadmap-titulo">Cierre</div>
+        <div class="roadmap-desc">Revisión de entregables y vista previa de la Sesión 21 — React desde cero</div>
+      </div>
+    </div>
+  </div>
+  <span class="slide-num-badge">02 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 3 — LOGROS ══════════ -->
+<section class="slide bg-teal" id="logros">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag teal">Objetivos</span>
+      <h2 class="sec-titulo">¿Qué vamos a lograr?</h2>
+      <p class="sec-desc">Al terminar la sesión, TechStore Pro tendrá su primer layout de página real y un catálogo responsive funcionando.</p>
+    </div>
+
+    <div class="roadmap-grid">
+      <div class="roadmap-card">
+        <div class="roadmap-num">01</div>
+        <div class="roadmap-icon">📦</div>
+        <div class="roadmap-tag">Layout</div>
+        <div class="roadmap-titulo">Contenedor de página real</div>
+        <div class="roadmap-desc">Un &lt;main&gt; que reemplaza el fragment suelto de S19 — ancho máximo, centrado, con espaciado consistente.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-num">02</div>
+        <div class="roadmap-icon">🛒</div>
+        <div class="roadmap-tag">Catálogo</div>
+        <div class="roadmap-titulo">Grid con productos reales</div>
+        <div class="roadmap-desc">Varias tarjetas de producto (mismo formato de precio del backend: <code style="font-family:'JetBrains Mono',monospace;font-size:11.5px;">"$89.900"</code>) organizadas en un grid.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-num">03</div>
+        <div class="roadmap-icon">📱</div>
+        <div class="roadmap-tag">Responsive</div>
+        <div class="roadmap-titulo">Breakpoints reales</div>
+        <div class="roadmap-desc">1 columna en celular, 2 en tablet, 3 en escritorio — probado cambiando el tamaño de la ventana del navegador.</div>
+      </div>
+    </div>
+  </div>
+  <span class="slide-num-badge">03 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 4 — MOBILE-FIRST ══════════ -->
+<section class="slide bg-alt" id="concepto">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag verde">Concepto</span>
+      <h2 class="sec-titulo">¿Qué significa "mobile-first"?</h2>
+      <p class="sec-desc">Diseñar primero pensando en la pantalla más pequeña (un celular), y luego ir agregando ajustes para pantallas más grandes — nunca al revés. No es solo una filosofía de diseño: en Tailwind es literalmente cómo funciona la sintaxis de las clases.</p>
+    </div>
+
+    <div class="concepto-grid" style="grid-template-columns:1fr 1fr;margin-bottom:20px;">
+      <div class="concepto-card" style="border-color:rgba(239,68,68,.3); background:var(--alerta-rojo-glow);">
+        <div class="concepto-icon">❌</div>
+        <div class="concepto-titulo">Sin mobile-first (al revés)</div>
+        <div class="concepto-desc">Se diseña para escritorio primero, y después hay que "apagar" o reacomodar cosas para que quepan en celular — más trabajo, más bugs visuales.</div>
+      </div>
+      <div class="concepto-card verde">
+        <div class="concepto-icon">✅</div>
+        <div class="concepto-titulo">Con mobile-first (hoy)</div>
+        <div class="concepto-desc">Se diseña para celular primero, y después se agregan mejoras a medida que hay más espacio — nunca hay que "deshacer" nada.</div>
+      </div>
+    </div>
+
+    <div class="concepto-grid">
+      <div class="concepto-card verde">
+        <div class="concepto-icon">📱</div>
+        <div class="concepto-titulo">Empiezas por el celular</div>
+        <div class="concepto-desc">Las clases normales de Tailwind (<code style="font-family:'JetBrains Mono',monospace;font-size:11px;">flex</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">p-4</code>) sin ningún prefijo aplican <strong>siempre</strong>, empezando por la pantalla más chica.</div>
+      </div>
+      <div class="concepto-card azul">
+        <div class="concepto-icon">📈</div>
+        <div class="concepto-titulo">Vas agregando desde ahí</div>
+        <div class="concepto-desc">Un prefijo como <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">md:flex</code> significa "a partir de esta pantalla en adelante, aplica esto" — nunca "solo en esta pantalla".</div>
+      </div>
+      <div class="concepto-card teal">
+        <div class="concepto-icon">🌍</div>
+        <div class="concepto-titulo">Por qué importa hoy</div>
+        <div class="concepto-desc">Más de la mitad del tráfico web real es desde celular. Si el diseño funciona bien ahí primero, escalar hacia arriba es más simple que reducir un diseño de escritorio.</div>
+      </div>
+    </div>
+
+    <div class="info-box tip">
+      <div class="info-box-title">✅ Regla clave para hoy</div>
+      <div class="info-box-content">La clase sin prefijo (<code style="font-family:'JetBrains Mono',monospace;font-size:12px;">flex</code>) es el diseño base, el que aplica siempre desde el celular más pequeño. Un prefijo como <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">md:flex</code> no reemplaza esa base — <strong>se suma</strong> a partir de esa pantalla en adelante. Más adelante vamos a ver este mismo patrón aplicado al grid del catálogo de productos.</div>
+    </div>
+  </div>
+  <span class="slide-num-badge">04 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 5 — GRID VS FLEXBOX ══════════ -->
+<section class="slide" id="grid-flex">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag azul">Concepto</span>
+      <h2 class="sec-titulo">Grid vs. Flexbox — ¿cuándo usar cada uno?</h2>
+      <p class="sec-desc">Ya conocemos <code style="font-family:'JetBrains Mono',monospace;">flex</code> desde S19 (el navbar, el footer). Hoy se suma <code style="font-family:'JetBrains Mono',monospace;">grid</code> — no compiten, cada uno sirve para un caso distinto.</p>
+    </div>
+
+    <div class="tabla-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Situación</th>
+            <th>Usar Flexbox</th>
+            <th>Usar Grid</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Elementos en una sola fila o columna</td>
+            <td>✅ <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">flex</code> — navbar, footer</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Varias tarjetas repetidas, en filas y columnas</td>
+            <td>—</td>
+            <td>✅ <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid grid-cols-3</code> — catálogo de productos</td>
+          </tr>
+          <tr>
+            <td>Centrar un solo elemento</td>
+            <td>✅ <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">flex items-center justify-center</code></td>
+            <td>✅ también funciona, pero flex es más directo</td>
+          </tr>
+          <tr>
+            <td>Controlar cuántas columnas hay según el tamaño</td>
+            <td>Posible, pero incómodo</td>
+            <td>✅ <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid-cols-1 md:grid-cols-2 lg:grid-cols-3</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box info">
+      <div class="info-box-title">💡 Regla simple para hoy</div>
+      <div class="info-box-content">El catálogo de productos (varias tarjetas repetidas) usa <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid</code>. Dentro de cada tarjeta individual (imagen arriba, texto abajo) seguimos usando <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">flex flex-col</code>, igual que en S19 — se combinan sin problema.</div>
+    </div>
+  </div>
+  <span class="slide-num-badge">05 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 6 — DEMO VISUAL DEL GRID ══════════ -->
+<section class="slide bg-teal" id="grid-demo">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag teal">En vivo</span>
+      <h2 class="sec-titulo">El mismo grid, 3 tamaños de pantalla</h2>
+      <p class="sec-desc">Con <code style="font-family:'JetBrains Mono',monospace;">grid-cols-1 md:grid-cols-2 lg:grid-cols-3</code>, el número de columnas cambia solo según el ancho de la pantalla — sin escribir ni una línea de CSS a mano.</p>
+    </div>
+
+    <div class="concepto-grid" style="grid-template-columns:1fr 1fr 1.4fr;">
+      <div>
+        <div class="browser-mock">
+          <div class="browser-bar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+          <div class="demo-grid cols-1">
+            <div class="demo-card"><img><div class="t">Mouse</div><div class="p">$89.900</div></div>
+            <div class="demo-card"><img><div class="t">Teclado</div><div class="p">$149.900</div></div>
+            <div class="demo-card"><img><div class="t">Monitor</div><div class="p">$899.900</div></div>
+          </div>
+        </div>
+        <div class="device-label">📱 Celular — 1 columna</div>
+      </div>
+      <div>
+        <div class="browser-mock">
+          <div class="browser-bar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+          <div class="demo-grid cols-2">
+            <div class="demo-card"><img><div class="t">Mouse</div><div class="p">$89.900</div></div>
+            <div class="demo-card"><img><div class="t">Teclado</div><div class="p">$149.900</div></div>
+            <div class="demo-card"><img><div class="t">Monitor</div><div class="p">$899.900</div></div>
+          </div>
+        </div>
+        <div class="device-label">📱 Tablet — 2 columnas</div>
+      </div>
+      <div>
+        <div class="browser-mock">
+          <div class="browser-bar"><div class="browser-dot r"></div><div class="browser-dot y"></div><div class="browser-dot g"></div></div>
+          <div class="demo-grid cols-3">
+            <div class="demo-card"><img><div class="t">Mouse</div><div class="p">$89.900</div></div>
+            <div class="demo-card"><img><div class="t">Teclado</div><div class="p">$149.900</div></div>
+            <div class="demo-card"><img><div class="t">Monitor</div><div class="p">$899.900</div></div>
+          </div>
+        </div>
+        <div class="device-label">🖥️ Escritorio — 3 columnas</div>
+      </div>
+    </div>
+  </div>
+  <span class="slide-num-badge">06 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 7 — BREAKPOINTS ══════════ -->
+<section class="slide bg-alt" id="breakpoints">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag naranja">Concepto</span>
+      <h2 class="sec-titulo">Los breakpoints de Tailwind</h2>
+      <p class="sec-desc">Un breakpoint es un ancho de pantalla a partir del cual se activa un prefijo. Tailwind ya trae 5 definidos — hoy usamos los primeros 3.</p>
+    </div>
+
+    <div class="tabla-wrap">
+      <table>
+        <thead>
+          <tr><th>Prefijo</th><th>Ancho mínimo</th><th>Dispositivo típico</th><th>¿Lo usamos hoy?</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">(ninguno)</code></td><td>0px</td><td>Celular</td><td>✅ Base de todo</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">sm:</code></td><td>640px</td><td>Celular grande</td><td>✅</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">md:</code></td><td>768px</td><td>Tablet</td><td>✅</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">lg:</code></td><td>1024px</td><td>Laptop</td><td>✅</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">xl:</code> / <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">2xl:</code></td><td>1280px / 1536px</td><td>Monitor grande</td><td>No por ahora</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="code-editor" style="max-width:600px;margin:20px auto 0;">
+      <div class="code-editor-header">
+        <div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div>
+        <div class="code-editor-title">Ejemplo — una sola clase con 3 reglas</div>
+      </div>
+      <div class="code-editor-body">
+        <div class="cl"><span class="ln"></span><span class="code"><span class="punc">&lt;</span><span class="tag">div</span> <span class="attr">className</span>=<span class="str">"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"</span><span class="punc">&gt;</span></span></div>
+      </div>
+    </div>
+
+    <div class="tabla-wrap" style="max-width:600px;margin:16px auto 0;">
+      <table>
+        <thead><tr><th>Trozo de la clase</th><th>Qué significa</th></tr></thead>
+        <tbody>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid</code></td><td>Activa CSS Grid — se escribe <strong>una sola vez</strong>, no por cada breakpoint</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid-cols-1</code></td><td>Sin prefijo → aplica siempre, empezando en celular: 1 columna</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">md:grid-cols-2</code></td><td>Desde 768px en adelante: cambia a 2 columnas</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">lg:grid-cols-3</code></td><td>Desde 1024px en adelante: cambia a 3 columnas</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">gap-6</code></td><td>Espacio entre celdas del grid — no depende del tamaño de pantalla</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box warning" style="margin-top:16px;">
+      <div class="info-box-title">⚠️ Son 4 clases independientes, no una sola regla con 3 partes</div>
+      <div class="info-box-content"><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid-cols-1</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">md:grid-cols-2</code> y <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">lg:grid-cols-3</code> conviven en el mismo <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">className</code>, pero cada una controla el número de columnas <strong>desde su propio ancho de pantalla en adelante</strong> — por eso a los 1024px gana <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">lg:grid-cols-3</code> sobre las otras dos, aunque las tres sigan escritas ahí.</div>
+    </div>
+  </div>
+  <span class="slide-num-badge">07 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 8 — CONTENEDOR REAL DESDE EL INICIO ══════════ -->
+<section class="slide bg-azul" id="contenedor">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag azul">Corrección de S19</span>
+      <h2 class="sec-titulo">Hoy empezamos con un contenedor real</h2>
+      <p class="sec-desc">En S19, el navbar, la tarjeta, el botón y el footer quedaron sueltos dentro del fragment (<code style="font-family:'JetBrains Mono',monospace;">&lt;&gt;...&lt;/&gt;</code>) — por eso se veían pegados al borde, sin espacio entre secciones. Hoy la guía arranca envolviendo todo en un contenedor real desde el Paso 1.</p>
+    </div>
+
+    <div class="concepto-grid">
+      <div class="concepto-card verde">
+        <div class="concepto-icon">🫥</div>
+        <div class="concepto-titulo">Antes — solo fragment</div>
+        <div class="concepto-desc">El <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">&lt;&gt;</code> agrupa pero no genera HTML — no admite <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">className</code>, así que no hay padding, ni orden, ni separación entre secciones.</div>
+      </div>
+      <div class="concepto-card azul">
+        <div class="concepto-icon">📦</div>
+        <div class="concepto-titulo">Hoy — un &lt;main&gt; real</div>
+        <div class="concepto-desc">Se reemplaza el fragment por un <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">&lt;main&gt;</code> con <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">className</code> — sí genera HTML, y ahí sí aplican padding, ancho máximo y espaciado.</div>
+      </div>
+      <div class="concepto-card teal">
+        <div class="concepto-icon">✅</div>
+        <div class="concepto-titulo">El resultado</div>
+        <div class="concepto-desc">Todo el contenido nuevo de hoy (el grid de catálogo) cae automáticamente dentro de ese contenedor ordenado — no hace falta arreglarlo después.</div>
+      </div>
+    </div>
+
+    <span class="sec-tag teal" style="margin-top:8px;">💡 Ya lo conoces</span>
+
+    <div class="code-editor" style="max-width:640px;margin:12px auto 20px;">
+      <div class="code-editor-header">
+        <div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div>
+        <div class="code-editor-title">frontend-react/src/App.jsx — Paso 1 de la guía</div>
+      </div>
+      <div class="code-editor-body">
+        <div class="cl"><span class="ln"></span><span class="code"><span class="punc">&lt;</span><span class="tag">main</span> <span class="attr">className</span>=<span class="str">"max-w-6xl mx-auto px-6 py-10"</span><span class="punc">&gt;</span></span></div>
+      </div>
+    </div>
+
+    <div class="tabla-wrap" style="max-width:640px;margin:0 auto;">
+      <table>
+        <thead><tr><th>Clase</th><th>Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">max-w-6xl</code></td><td>El contenido nunca supera ~1152px de ancho, aunque la pantalla sea más grande</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">mx-auto</code></td><td>Centra ese bloque horizontalmente (margen automático a los dos lados)</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">px-6</code></td><td>Espacio a los costados, para que nada toque el borde de la pantalla</td></tr>
+          <tr><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">py-10</code></td><td>Espacio arriba y abajo de todo el contenido</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <span class="slide-num-badge">08 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 9 — PREREQUISITOS ══════════ -->
+<section class="slide bg-alt" id="prerequisitos">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag amarillo">Antes de empezar</span>
+      <h2 class="sec-titulo">Prerequisitos</h2>
+      <p class="sec-desc">Todo lo de hoy se construye sobre lo que ya existe de la Sesión 19 — no hay instalación nueva.</p>
+    </div>
+
+    <div class="concepto-grid">
+      <div class="concepto-card verde">
+        <div class="concepto-icon">✅</div>
+        <div class="concepto-titulo">frontend-react/ funcionando</div>
+        <div class="concepto-desc">Vite + Tailwind ya instalados desde S19, corriendo en <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">localhost:5173</code> sin errores.</div>
+      </div>
+      <div class="concepto-card verde">
+        <div class="concepto-icon">✅</div>
+        <div class="concepto-titulo">Colores del @theme configurados</div>
+        <div class="concepto-desc"><code style="font-family:'JetBrains Mono',monospace;font-size:11px;">bg-verde</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">text-verde</code>, etc. — del Paso 3 de la guía de S19.</div>
+      </div>
+      <div class="concepto-card verde">
+        <div class="concepto-icon">✅</div>
+        <div class="concepto-titulo">Navbar migrado</div>
+        <div class="concepto-desc">El navbar del Paso 5 de S19 sigue en <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">App.jsx</code> — hoy se reorganiza, no se borra.</div>
+      </div>
+      <div class="concepto-card naranja">
+        <div class="concepto-icon">🧹</div>
+        <div class="concepto-titulo">Limpiar el contenido de práctica</div>
+        <div class="concepto-desc">Si quedaron la tarjeta suelta, el botón secundario o el footer de los ejercicios de S19, hoy se acomodan dentro del nuevo contenedor — no se pierden, se reorganizan.</div>
+      </div>
+    </div>
+
+    <div class="info-box warning">
+      <div class="info-box-title">⚠️ No hace falta reinstalar nada</div>
+      <div class="info-box-content">Ni Vite, ni Tailwind, ni ningún paquete nuevo — todo lo de hoy son clases utility adicionales sobre el mismo proyecto de S19.</div>
+    </div>
+  </div>
+  <span class="slide-num-badge">09 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 10 — RESUMEN DE CLASES NUEVAS ══════════ -->
+<section class="slide" id="resumen-clases">
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag purpura">Referencia rápida</span>
+      <h2 class="sec-titulo">Las clases nuevas de hoy</h2>
+      <p class="sec-desc">Todo lo de S19 (flex, p-4, colores) sigue funcionando igual — esto es lo que se suma hoy.</p>
+    </div>
+
+    <div class="tabla-wrap">
+      <table>
+        <thead><tr><th>Categoría</th><th>Clases</th><th>Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td>Grid</td><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid</code> <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">grid-cols-N</code></td><td>Activa CSS Grid y define el número de columnas</td></tr>
+          <tr><td>Espaciado de grid</td><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">gap-6</code></td><td>Separación uniforme entre celdas del grid</td></tr>
+          <tr><td>Breakpoints</td><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">sm:</code> <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">md:</code> <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">lg:</code></td><td>Prefijo que activa la clase desde ese ancho de pantalla en adelante</td></tr>
+          <tr><td>Contenedor</td><td><code style="font-family:'JetBrains Mono',monospace;font-size:12px;">max-w-6xl</code> <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">mx-auto</code></td><td>Ancho máximo + centrado automático horizontal</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <span class="slide-num-badge">10 / 11</span>
+</section>
+
+<!-- ══════════ SLIDE 11 — ENTREGABLE ══════════ -->
+<section class="slide bg-verde" id="entregable">
+  <div class="bg-dots"></div>
+  <div class="slide-inner">
+    <div class="sec-header">
+      <span class="sec-tag verde">Cierre · Sesión 20</span>
+      <h2 class="sec-titulo">¡Empezamos!</h2>
+    </div>
+
+    <div class="entregable-box">
+      <div class="entregable-title">Criterios de evaluación</div>
+      <ul class="entregable-list">
+        <li>App.jsx envuelto en un &lt;main&gt; con layout real (max-w, mx-auto, padding)</li>
+        <li>Grid de catálogo con al menos 3 tarjetas de producto</li>
+        <li>Tarjetas con datos realistas (nombre, precio con formato "$XX.XXX", imagen)</li>
+        <li>Grid responsive: 1 columna en celular, 2 en tablet, 3 en escritorio</li>
+        <li>Navbar y footer de S19 conservados y reorganizados dentro del nuevo layout</li>
+        <li>Probado cambiando el ancho de la ventana del navegador, sin errores en consola</li>
+      </ul>
+    </div>
+
+    <div class="concepto-grid" style="margin-top:24px;">
+      <div class="concepto-card azul">
+        <div class="concepto-icon">📖</div>
+        <div class="concepto-titulo">02 — Guía paso a paso</div>
+        <div class="concepto-desc">La parte <strong>obligatoria</strong> de hoy: contenedor real, grid de catálogo y breakpoints, aplicados directo sobre <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">App.jsx</code>.</div>
+        <a href="https://juliantrujilo.github.io/02_GUIA_COMPONENTES_RESPONSIVE/" target="_blank" style="display:inline-block;margin-top:10px;color:#1e40af;font-weight:700;text-decoration:underline;font-size:13px;">Abrir guía →</a>
+      </div>
+      <div class="concepto-card teal">
+        <div class="concepto-icon">✏️</div>
+        <div class="concepto-titulo">03 — Ejercicios de práctica</div>
+        <div class="concepto-desc"><strong>Opcional</strong> — solo si sobra tiempo después de terminar la guía 02. Refuerzo con más clases de grid y breakpoints.</div>
+        <a href="https://juliantrujilo.github.io/03_EJERCICIOS_PRACTICA_S20/" target="_blank" style="display:inline-block;margin-top:10px;color:#0369a1;font-weight:700;text-decoration:underline;font-size:13px;">Abrir ejercicios →</a>
+      </div>
+    </div>
+
+    <div class="info-box teal" style="margin-top:20px;">
+      <div class="info-box-title">Próxima sesión — S21</div>
+      <div class="info-box-content">Cierra el Bloque A de Tailwind y arranca el Bloque B: ¿Qué es React? Componentes, JSX, Virtual DOM, y el primer <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">&lt;Navbar /&gt;</code> como componente separado de verdad.</div>
+    </div>
+  </div>
+  <span class="slide-num-badge">11 / 11</span>
+</section>
+
+<!-- ── FOOTER NAV FIJO ── -->
+<nav class="footer-nav">
+  <button class="footer-btn" id="btn-prev" onclick="navSlide(-1)" disabled>← Anterior</button>
+  <span class="footer-page" id="footer-page">Slide 1 de 11</span>
+  <button class="footer-btn" id="btn-next" onclick="navSlide(1)">Siguiente →</button>
+</nav>
+
+<script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+const slides = Array.from(document.querySelectorAll('.slide'));
+let current = 0;
+const btnPrev = document.getElementById('btn-prev');
+const btnNext = document.getElementById('btn-next');
+const pageLabel = document.getElementById('footer-page');
+
+function updateNav() {
+  btnPrev.disabled = current === 0;
+  btnNext.disabled = current === slides.length - 1;
+  pageLabel.textContent = 'Slide ' + (current + 1) + ' de ' + slides.length;
+}
+
+function navSlide(dir) {
+  current = Math.max(0, Math.min(slides.length - 1, current + dir));
+  slides[current].scrollIntoView({ behavior: 'smooth' });
+  updateNav();
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      current = slides.indexOf(e.target);
+      updateNav();
+    }
+  });
+}, { threshold: 0.5 });
+slides.forEach(s => observer.observe(s));
+
+updateNav();
+</script>
+</body>
+</html>
